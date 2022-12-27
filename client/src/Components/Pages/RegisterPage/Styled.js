@@ -24,7 +24,7 @@ export const TrelloIconContainer = styled.div`
 `;
 export const Icon = styled.img`
   display: block;
-  height: 2.6rem;
+  height: 2.4rem;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 2.5rem;
@@ -91,7 +91,7 @@ export const Input = styled.input`
   }
 `;
 export const Button = styled.button`
-  background-color: #5aac44;
+  background-color: #0079bf;
   width: 100%;
   border-radius: 0.4rem;
   padding: 0.5rem 1rem;
@@ -103,7 +103,7 @@ export const Button = styled.button`
     background: ${(props) =>
       props.disabled
         ? "lightgrey"
-        : "linear-gradient(to bottom, #61bd4f 0%, #5aac44 100%)"};
+        : "linear-gradient(to bottom, #0060BF 0%, #0079BF 100%)"};
   }
   &:disabled {
     background-color: lightgray;

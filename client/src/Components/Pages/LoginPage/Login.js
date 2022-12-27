@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { login } from "../../../Services/userService";
 import Background from "../../Background";
+import kanbanLogo from "../../../Images/TasManBlack.png";
 import {
   BgContainer,
   Container,
@@ -28,8 +29,8 @@ const Login = () => {
   });
 
   useEffect(() => {
-    document.title = "Log in to Trello Clone"
-  }, [])
+    document.title = "Log in to TasMan";
+  }, []);
   const handleSubmit = (e) => {
     e.preventDefault();
     login(userInformations, dispatch);
@@ -41,12 +42,12 @@ const Login = () => {
       </BgContainer>
       <Container>
         <TrelloIconContainer onClick={() => history.push("/")}>
-          <Icon src="https://d2k1ftgv7pobq7.cloudfront.net/meta/c/p/res/images/trello-header-logos/167dc7b9900a5b241b15ba21f8037cf8/trello-logo-blue.svg" />
+          <Icon src={kanbanLogo} />
         </TrelloIconContainer>
         <FormSection>
           <FormCard>
             <Form onSubmit={(e) => handleSubmit(e)}>
-              <Title>Log in to Trello</Title>
+              <Title>Log in to TasMan</Title>
               <Input
                 type="email"
                 placeholder="Enter email"

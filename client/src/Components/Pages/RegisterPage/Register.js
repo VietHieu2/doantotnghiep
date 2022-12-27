@@ -19,6 +19,7 @@ import {
   Link,
 } from "./Styled";
 import { useEffect } from "react";
+import TasManIndex from "../../../Images/TasManBlack.png";
 
 const Register = () => {
   let history = useHistory();
@@ -33,8 +34,8 @@ const Register = () => {
   });
 
   useEffect(() => {
-    document.title = "Create a Trello Account"
-  }, [])
+    document.title = "Create a TasMan Account";
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,7 +49,7 @@ const Register = () => {
       </BgContainer>
       <Container>
         <TrelloIconContainer onClick={() => history.push("/")}>
-          <Icon src="https://d2k1ftgv7pobq7.cloudfront.net/meta/c/p/res/images/trello-header-logos/167dc7b9900a5b241b15ba21f8037cf8/trello-logo-blue.svg" />
+          <Icon src={TasManIndex} />
         </TrelloIconContainer>
         <FormSection>
           <FormCard>
