@@ -141,11 +141,17 @@ const addMember = async (req, res) => {
 
 const removeMember = async (req, res) => {
   const { boardId } = req.params;
-  const { members } = req.body;
-  await boardService.removeMember(boardId, members, req.user, (err, result) => {
-    if (err) return res.status(400).send(err);
-    return res.status(200).send(result);
-  });
+  const { emailRemoved } = req.body;
+
+  await boardService.removeMember(
+    boardId,
+    emailRemoved,
+    req.user,
+    (err, result) => {
+      if (err) return res.status(400).send(err);
+      return res.status(200).send(result);
+    }
+  );
 };
 
 module.exports = {

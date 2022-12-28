@@ -1,4 +1,6 @@
 // const { findOne } = require("../Models/boardModel");
+const ObjectID = require("mongodb").ObjectID;
+const { isValidObjectId } = require("mongoose");
 const boardModel = require("../Models/boardModel");
 const userModel = require("../Models/userModel");
 
@@ -229,11 +231,21 @@ const addMember = async (id, members, user, callback) => {
   }
 };
 
-const removeMember = async (boardId, members, user, callback) => {
+const removeMember = async (boardId, emailRemoved, user, callback) => {
   try {
-    console.log(members);
-    // const removeMember = await boardModel.updateOne("$members.userId":memberId, "remove")//lag v choa :))
-    await removeMember.save();
+    const board = await boardModel.findById(boardId);
+    const members = board.members;
+    if (!board) throw callback({ message: "board is empty" });
+    const totalMember = members.filter((v) => v.email !== emailRemoved);
+    Promise.all([
+      await boardModel.findByIdAndUpdate(boardId, { members: totalMember }),
+      await userModel.updateOne(
+        { email: emailRemoved },
+        { $pull: { boards: new ObjectID(boardId) } }
+      ),
+    ]);
+
+    // await removeMember.save();
     return callback(false, { message: "Delete Success" });
   } catch (error) {
     return callback({
