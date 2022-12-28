@@ -1,4 +1,4 @@
-const { findOne } = require("../Models/boardModel");
+// const { findOne } = require("../Models/boardModel");
 const boardModel = require("../Models/boardModel");
 const userModel = require("../Models/userModel");
 
@@ -74,7 +74,6 @@ const getAll = async (userId, callback) => {
   try {
     // Get user
     const user = await userModel.findById(userId);
-
     // Get board's ids of user
     const boardIds = user.boards;
 
@@ -230,6 +229,20 @@ const addMember = async (id, members, user, callback) => {
   }
 };
 
+const removeMember = async (boardId, members, user, callback) => {
+  try {
+    console.log(members);
+    // const removeMember = await boardModel.updateOne("$members.userId":memberId, "remove")//lag v choa :))
+    await removeMember.save();
+    return callback(false, { message: "Delete Success" });
+  } catch (error) {
+    return callback({
+      errMessage: "Something went wrong",
+      details: error.message,
+    });
+  }
+};
+
 module.exports = {
   create,
   getAll,
@@ -239,4 +252,5 @@ module.exports = {
   updateBoardDescription,
   updateBackground,
   addMember,
+  removeMember,
 };

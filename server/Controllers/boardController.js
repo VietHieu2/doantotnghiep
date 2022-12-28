@@ -15,8 +15,10 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
   const userId = req.user.id;
+  console.log(boardService.getAll(userId));
   await boardService.getAll(userId, (err, result) => {
     if (err) return res.status(400).send(err);
+    console.log(result);
     return res.status(200).send(result);
   });
 };
@@ -137,6 +139,15 @@ const addMember = async (req, res) => {
   });
 };
 
+const removeMember = async (req, res) => {
+  const { boardId } = req.params;
+  const { members } = req.body;
+  await boardService.removeMember(boardId, members, req.user, (err, result) => {
+    if (err) return res.status(400).send(err);
+    return res.status(200).send(result);
+  });
+};
+
 module.exports = {
   create,
   getAll,
@@ -146,4 +157,5 @@ module.exports = {
   updateBoardDescription,
   updateBackground,
   addMember,
+  removeMember,
 };

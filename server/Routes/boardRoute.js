@@ -10,6 +10,8 @@ route.put(
 );
 route.put("/:boardId/update-board-title", boardController.updateBoardTitle);
 route.post("/create", boardController.create);
+route.delete("/:boardId/remove", boardController.removeMember);
+
 route.get("/:id", boardController.getById);
 route.get("/:id/activity", boardController.getActivityById);
 route.get("/", boardController.getAll);
