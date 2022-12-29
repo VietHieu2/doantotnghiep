@@ -2,6 +2,8 @@
 const ObjectID = require("mongodb").ObjectID;
 const { isValidObjectId } = require("mongoose");
 const boardModel = require("../Models/boardModel");
+const cardModel = require("../Models/cardModel");
+const listModel = require("../Models/listModel");
 const userModel = require("../Models/userModel");
 
 const create = async (req, callback) => {
@@ -232,27 +234,43 @@ const addMember = async (id, members, user, callback) => {
 };
 
 const removeMember = async (boardId, emailRemoved, user, callback) => {
-  try {
-    const board = await boardModel.findById(boardId);
-    const members = board.members;
-    if (!board) throw callback({ message: "board is empty" });
-    const totalMember = members.filter((v) => v.email !== emailRemoved);
-    Promise.all([
-      await boardModel.findByIdAndUpdate(boardId, { members: totalMember }),
-      await userModel.updateOne(
-        { email: emailRemoved },
-        { $pull: { boards: new ObjectID(boardId) } }
-      ),
-    ]);
+  // try {
+  const board = await boardModel.findById(boardId);
 
-    // await removeMember.save();
-    return callback(false, { message: "Delete Success" });
-  } catch (error) {
-    return callback({
-      errMessage: "Something went wrong",
-      details: error.message,
-    });
-  }
+  const list = await boardModel.aggregate([
+    // { $unwind: "$cards" },
+    { $match: { _id: new ObjectID(boardId) } },
+    {
+      $lookup: {
+        from: "lists",
+        let: { pid: "$lists" },
+        pipeline: [{ $match: { $expr: { $in: ["$_id", "$$pid"] } } }],
+        as: "list",
+      },
+    },
+    // { $addFields: { $map: { input: "$list", as: "card1" } } },
+    // { $project: { card: 0 } },
+  ]);
+
+  const cards = list.flatMap((a) => a.list.filter((c) => ({ ca: c.cards })), 1);
+  const members = board.members;
+  if (!board) throw callback({ message: "board is empty" });
+  const totalMember = members.filter((v) => v.email !== emailRemoved);
+  Promise.all([
+    // cardModel.update({ _id: list }),
+    boardModel.findByIdAndUpdate(boardId, { members: totalMember }),
+    userModel.updateOne(
+      { email: emailRemoved },
+      { $pull: { boards: new ObjectID(boardId) } }
+    ),
+  ]);
+  return callback(false, { cards });
+  // } catch (error) {
+  //   return callback({
+  //     errMessage: "Something went wrong",
+  //     details: error.message,
+  //   });
+  // }
 };
 
 module.exports = {

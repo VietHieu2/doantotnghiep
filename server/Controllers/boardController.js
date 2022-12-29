@@ -15,10 +15,10 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
   const userId = req.user.id;
-  console.log(boardService.getAll(userId));
+  // console.log(boardService.getAll(userId));
   await boardService.getAll(userId, (err, result) => {
     if (err) return res.status(400).send(err);
-    console.log(result);
+    // console.log(result);
     return res.status(200).send(result);
   });
 };
