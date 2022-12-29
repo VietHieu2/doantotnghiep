@@ -234,12 +234,13 @@ const addMember = async (id, members, user, callback) => {
 
 const removeMember = async (boardId, emailRemoved, user, callback) => {
   try {
-    const board = await boardModel.findById(boardId);
     // if (!board) throw callback({ message: "board is empty" });
+    const userRemoved=userModel.findOne({email:emailRemoved})
+
     Promise.all([
       await cardModel.updateMany(
         boardId,
-        { $pull: { members: { email: emailRemoved } } },
+        { $pull: { members: { user: userRemoved._id } } },
         { multi: true }
       ),
       await boardModel.findByIdAndUpdate(
