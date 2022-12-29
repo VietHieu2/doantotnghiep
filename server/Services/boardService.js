@@ -199,8 +199,8 @@ const addMember = async (id, members, user, callback) => {
 
     // Set variables
     await Promise.all(
-      [members].map(async (member) => {
-        const newMember = await userModel.findOne({ email: 1 });
+      members.map(async (member) => {
+        const newMember = await userModel.findOne({ email: member.email });
         newMember.boards.push(board._id);
         await newMember.save();
         board.members.push({
