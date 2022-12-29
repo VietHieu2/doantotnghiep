@@ -3,7 +3,6 @@ const ObjectID = require("mongodb").ObjectID;
 const { isValidObjectId } = require("mongoose");
 const boardModel = require("../Models/boardModel");
 const cardModel = require("../Models/cardModel");
-const listModel = require("../Models/listModel");
 const userModel = require("../Models/userModel");
 
 const create = async (req, callback) => {
@@ -200,8 +199,8 @@ const addMember = async (id, members, user, callback) => {
 
     // Set variables
     await Promise.all(
-      members.map(async (member) => {
-        const newMember = await userModel.findOne({ email: member.email });
+      [members].map(async (member) => {
+        const newMember = await userModel.findOne({ email: 1 });
         newMember.boards.push(board._id);
         await newMember.save();
         board.members.push({
@@ -234,43 +233,33 @@ const addMember = async (id, members, user, callback) => {
 };
 
 const removeMember = async (boardId, emailRemoved, user, callback) => {
-  // try {
-  const board = await boardModel.findById(boardId);
+  try {
+    const board = await boardModel.findById(boardId);
+    // if (!board) throw callback({ message: "board is empty" });
+    Promise.all([
+      await cardModel.updateMany(
+        boardId,
+        { $pull: { members: { email: emailRemoved } } },
+        { multi: true }
+      ),
+      await boardModel.findByIdAndUpdate(
+        boardId,
+        { $pull: { members: { email: emailRemoved } } },
+        { multi: true }
+      ),
+      await userModel.updateOne(
+        { email: emailRemoved },
+        { $pull: { boards: new ObjectID(boardId) } }
+      ),
+    ]);
 
-  const list = await boardModel.aggregate([
-    // { $unwind: "$cards" },
-    { $match: { _id: new ObjectID(boardId) } },
-    {
-      $lookup: {
-        from: "lists",
-        let: { pid: "$lists" },
-        pipeline: [{ $match: { $expr: { $in: ["$_id", "$$pid"] } } }],
-        as: "list",
-      },
-    },
-    // { $addFields: { $map: { input: "$list", as: "card1" } } },
-    // { $project: { card: 0 } },
-  ]);
-
-  const cards = list.flatMap((a) => a.list.filter((c) => ({ ca: c.cards })), 1);
-  const members = board.members;
-  if (!board) throw callback({ message: "board is empty" });
-  const totalMember = members.filter((v) => v.email !== emailRemoved);
-  Promise.all([
-    // cardModel.update({ _id: list }),
-    boardModel.findByIdAndUpdate(boardId, { members: totalMember }),
-    userModel.updateOne(
-      { email: emailRemoved },
-      { $pull: { boards: new ObjectID(boardId) } }
-    ),
-  ]);
-  return callback(false, { cards });
-  // } catch (error) {
-  //   return callback({
-  //     errMessage: "Something went wrong",
-  //     details: error.message,
-  //   });
-  // }
+    return callback(false, { message: "Delete Success" });
+  } catch (error) {
+    return callback({
+      errMessage: "Something went wrong",
+      details: error.message,
+    });
+  }
 };
 
 module.exports = {

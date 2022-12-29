@@ -135,6 +135,10 @@ const cardSchema = mongoose.Schema({
 			],
 		},
 	],
+	boardId:{
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'board'
+	}
 });
 
 module.exports = mongoose.model('card', cardSchema);

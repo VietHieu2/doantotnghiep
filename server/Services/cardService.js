@@ -19,6 +19,7 @@ const create = async (title, listId, boardId, user, callback) => {
 		card.owner = listId;
 		card.activities.unshift({ text: `added this card to ${list.title}`, userName: user.name, color: user.color });
 		card.labels = helperMethods.labelsSeed;
+		card.boardId=boardId
 		await card.save();
 
 		// Add id of the new card to owner list
