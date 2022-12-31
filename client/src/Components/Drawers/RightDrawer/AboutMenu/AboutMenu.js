@@ -22,7 +22,16 @@ import {
   boardDescriptionUpdate,
   memberDelete,
 } from "../../../../Services/boardService";
-import { Avatar } from "@mui/material";
+import {
+  Avatar,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/DeleteForeverOutlined";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { ClickableIcon } from "../../styled";
 const AboutMenu = () => {
   const textAreaRef = useRef();
   const hiddenTextRef = useRef();
@@ -31,9 +40,23 @@ const AboutMenu = () => {
   const dispatch = useDispatch();
 
   const board = useSelector((state) => state.board);
+
+  const boardId = useSelector((state) => state.board.id);
   const [description, setDescription] = useState(board.description);
   const [textareaFocus, setTextareaFocus] = useState(false);
+  const userId = useSelector((state) => state.user.userInfo._id);
+  const userOwnerId = board.members.filter(
+    (member) => member.role === "owner"
+  )[0]?.user;
 
+  const checkRole = userId === userOwnerId;
+  const [anchorEl, setAnchorEl] = useState(null);
+  const hanldeOpen = Boolean(anchorEl);
+  const handleClose = () => setAnchorEl(null);
+  const handleClick = (event, email) => {
+    setAnchorEl(event.currentTarget, email);
+    console.log(email);
+  };
   const onChangeHandler = function (e) {
     const target = e.target;
     setDescription(target.value);
@@ -53,16 +76,18 @@ const AboutMenu = () => {
       }
   };
 
-  const handleKickUser = async () => {
-    await memberDelete(board.memberId, dispatch);
+  const handleKickUser = async (e, email) => {
+    e.preventDefault();
+    await memberDelete(boardId, email, dispatch);
+    console.log(email);
   };
 
   console.log(handleKickUser);
+
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   });
-
   return (
     <Container>
       <SectionContainer>
@@ -148,7 +173,6 @@ const AboutMenu = () => {
                     bgcolor: member.color,
                     fontWeight: "800",
                   }}
-                  onClick={(e) => handleKickUser()}
                 >
                   {member.name[0].toUpperCase()}
                 </Avatar>
@@ -159,6 +183,33 @@ const AboutMenu = () => {
                   )} ${member.surname.toUpperCase()}`}</MemberName>
                   <MemberEmail>{member.email}</MemberEmail>
                 </MemberInfoContainer>
+                {checkRole && (
+                  <ClickableIcon
+                    color="#656565"
+                    aria-controls="basic-menu"
+                    aria-haspopup="true"
+                    aria-expanded={hanldeOpen ? "true" : undefined}
+                    onClick={(e) => handleClick(e, member.email)}
+                  >
+                    <MoreHorizIcon fontSize="0.1rem" onClick={() => {}} />
+                  </ClickableIcon>
+                )}
+                <Menu
+                  id="basic-menu"
+                  anchorEl={anchorEl}
+                  open={hanldeOpen}
+                  onClose={handleClose}
+                  MenuListProps={{
+                    "aria-labelledby": "basic-button",
+                  }}
+                >
+                  <MenuItem onClick={(e) => handleKickUser(e, member.email)}>
+                    <ListItemIcon>
+                      <DeleteIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Delete</ListItemText>
+                  </MenuItem>
+                </Menu>
               </MemberSectionContainer>
             );
           })}

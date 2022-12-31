@@ -199,8 +199,8 @@ const addMember = async (id, members, user, callback) => {
 
     // Set variables
     await Promise.all(
-      [members].map(async (member) => {
-        const newMember = await userModel.findOne({ email: 1 });
+      members.map(async (member) => {
+        const newMember = await userModel.findOne({ email: member.email });
         newMember.boards.push(board._id);
         await newMember.save();
         board.members.push({
@@ -235,11 +235,11 @@ const addMember = async (id, members, user, callback) => {
 const removeMember = async (boardId, emailRemoved, user, callback) => {
   try {
     // if (!board) throw callback({ message: "board is empty" });
-    const userRemoved=userModel.findOne({email:emailRemoved})
+    const userRemoved = await userModel.findOne({ email: emailRemoved });
 
     Promise.all([
       await cardModel.updateMany(
-        boardId,
+        { boardId: new ObjectID(boardId) },
         { $pull: { members: { user: userRemoved._id } } },
         { multi: true }
       ),

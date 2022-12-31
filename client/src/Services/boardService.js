@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { Axios } from "axios";
 import {
   setLoading,
   successCreatingList,
@@ -170,6 +170,7 @@ export const boardMemberAdd = async (boardId, members, dispatch) => {
     const result = await axios.post(`${boardRoute}/${boardId}/add-member`, {
       members,
     });
+    console.log(result);
     await dispatch(addMembers(result.data));
     dispatch(
       openAlert({
@@ -189,15 +190,15 @@ export const boardMemberAdd = async (boardId, members, dispatch) => {
   }
 };
 
-export const memberDelete = async (boardId, memberId, dispatch) => {
+export const memberDelete = async (boardId, email, dispatch) => {
   try {
-    const result = await axios.delete(
-      `${boardRoute}/${boardId}/${memberId}/delete-member`,
-      {
-        memberId,
-      }
-    );
-    await dispatch(deleteMember(result.data));
+    const result = await axios({
+      method: "DELETE",
+      data: { emailRemoved: email },
+      url: `${boardRoute}/${boardId}/remove`,
+      timeout: 10000,
+    });
+    await dispatch(deleteMember(email));
     dispatch(
       openAlert({
         message: "Members are delete to this board successfully",

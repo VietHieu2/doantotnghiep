@@ -51,9 +51,11 @@ const boardSlice = createSlice({
       state.members = action.payload;
     },
     deleteMember: (state, action) => {
-      const { memberId } = action.payload;
+      console.log(action);
+      const emailId = action.payload;
+      console.log(emailId);
       state.members = state.members.filter(
-        (member) => member.user !== memberId
+        (member) => member.email !== emailId
       );
     },
   },

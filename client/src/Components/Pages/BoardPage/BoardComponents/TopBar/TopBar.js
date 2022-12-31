@@ -28,7 +28,6 @@ const TopBar = () => {
     (member) => member.role === "owner"
   )[0]?.user;
   const checkRole = userId === userOwnerId;
-  console.log(board);
   return (
     <style.TopBar>
       <style.LeftWrapper>

@@ -21,6 +21,7 @@ const Board = (props) => {
     (state) => state.board
   );
   const { allLists, loadingListService } = useSelector((state) => state.list);
+
   const [searchString, setSearchString] = useState("");
   const boardId = props.match.params.id;
   useEffect(() => {
