@@ -133,9 +133,8 @@ const Features = (props) => {
                 card.date.startDate ? formatDate(card.date.startDate) : ""
               }${card.date.startDate ? (card.date.dueDate ? " - " : "") : ""}${
                 card.date.dueDate ? formatDate(card.date.dueDate) : ""
-              }${
-                card.date.dueTime ? " at " + card.date.dueTime : ""
-              }`}</DateText>
+              }
+              `}</DateText>
               {moment(card.date.dueDate).toDate().getTime() <
               new Date().getTime() ? (
                 <OverDueLabel show={true}>overdue</OverDueLabel>

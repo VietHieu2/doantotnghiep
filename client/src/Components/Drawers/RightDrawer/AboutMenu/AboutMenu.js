@@ -24,23 +24,20 @@ import {
 } from "../../../../Services/boardService";
 import {
   Avatar,
-  ListItemIcon,
-  ListItemText,
-  Menu,
-  MenuItem,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/DeleteForeverOutlined";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { ClickableIcon } from "../../styled";
+import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 const AboutMenu = () => {
   const textAreaRef = useRef();
   const hiddenTextRef = useRef();
   const descriptionAreaRef = useRef();
-
   const dispatch = useDispatch();
-
   const board = useSelector((state) => state.board);
-
   const boardId = useSelector((state) => state.board.id);
   const [description, setDescription] = useState(board.description);
   const [textareaFocus, setTextareaFocus] = useState(false);
@@ -48,15 +45,21 @@ const AboutMenu = () => {
   const userOwnerId = board.members.filter(
     (member) => member.role === "owner"
   )[0]?.user;
-
   const checkRole = userId === userOwnerId;
-  const [anchorEl, setAnchorEl] = useState(null);
-  const hanldeOpen = Boolean(anchorEl);
-  const handleClose = () => setAnchorEl(null);
-  const handleClick = (event, email) => {
-    setAnchorEl(event.currentTarget, email);
+  const [open, setOpen] = useState(null);
+  const hanldeOpen = Boolean(open);
+  const [userDelete, setUserDelete] = useState(null);
+  const handleClickOpen = (email) => {
+    setUserDelete(email);
     console.log(email);
+    setOpen(true);
   };
+
+  const handleClose = () => {
+    setOpen(false);
+    setUserDelete(null);
+  };
+
   const onChangeHandler = function (e) {
     const target = e.target;
     setDescription(target.value);
@@ -78,11 +81,9 @@ const AboutMenu = () => {
 
   const handleKickUser = async (e, email) => {
     e.preventDefault();
-    await memberDelete(boardId, email, dispatch);
-    console.log(email);
+    setOpen(false);
+    await memberDelete(boardId, userDelete, dispatch);
   };
-
-  console.log(handleKickUser);
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
@@ -184,32 +185,52 @@ const AboutMenu = () => {
                   <MemberEmail>{member.email}</MemberEmail>
                 </MemberInfoContainer>
                 {checkRole && (
-                  <ClickableIcon
-                    color="#656565"
-                    aria-controls="basic-menu"
-                    aria-haspopup="true"
-                    aria-expanded={hanldeOpen ? "true" : undefined}
-                    onClick={(e) => handleClick(e, member.email)}
-                  >
-                    <MoreHorizIcon fontSize="0.1rem" onClick={() => {}} />
-                  </ClickableIcon>
+                  <>
+                    <PersonRemoveIcon
+                      onClick={() => handleClickOpen(member.email)}
+                      size="small"
+                      sx={{
+                        cursor: "pointer",
+                      }}
+                    />
+                    <Dialog
+                      open={hanldeOpen}
+                      onClose={handleClose}
+                      aria-labelledby="alert-dialog-title"
+                      aria-describedby="alert-dialog-description"
+                    >
+                      <DialogTitle id="alert-dialog-title">
+                        {"Confirm Remove"}
+                      </DialogTitle>
+                      <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                          Are you sure to kick this person out of the project?
+                        </DialogContentText>
+                      </DialogContent>
+                      <DialogActions>
+                        <Button
+                          onClick={handleClose}
+                          sx={{
+                            bgcolor: "#F0F0F0",
+                            color: "#000",
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          onClick={(e) => handleKickUser(e, member.email)}
+                          autoFocus
+                          sx={{
+                            bgcolor: "#DC3545",
+                            color: "#FFFFFF",
+                          }}
+                        >
+                          Yes, Remove
+                        </Button>
+                      </DialogActions>
+                    </Dialog>
+                  </>
                 )}
-                <Menu
-                  id="basic-menu"
-                  anchorEl={anchorEl}
-                  open={hanldeOpen}
-                  onClose={handleClose}
-                  MenuListProps={{
-                    "aria-labelledby": "basic-button",
-                  }}
-                >
-                  <MenuItem onClick={(e) => handleKickUser(e, member.email)}>
-                    <ListItemIcon>
-                      <DeleteIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText>Delete</ListItemText>
-                  </MenuItem>
-                </Menu>
               </MemberSectionContainer>
             );
           })}

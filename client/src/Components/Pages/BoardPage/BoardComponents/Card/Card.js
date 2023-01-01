@@ -157,8 +157,6 @@ const Card = (props) => {
                             : ""
                         }${
                           card.date.dueDate ? formatDate(card.date.dueDate) : ""
-                        }${
-                          card.date.dueTime ? " at " + card.date.dueTime : ""
                         }`}</Span>
                       </DateContainer>
                     )}
