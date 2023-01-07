@@ -16,8 +16,8 @@ import {
   updateDescription,
 } from "../Redux/Slices/boardSlice";
 
-const listRoute = "http://localhost:3001/list";
-const boardRoute = "http://localhost:3001/board";
+const listRoute = "http://52.221.201.188:3001/list";
+const boardRoute = "http://52.221.201.188:3001/board";
 
 export const getLists = async (boardId, dispatch) => {
   dispatch(setLoading(true));
