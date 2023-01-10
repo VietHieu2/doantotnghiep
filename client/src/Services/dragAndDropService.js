@@ -4,8 +4,9 @@ import {
   updateListDragDrop,
 } from "../Redux/Slices/listSlice";
 import { openAlert } from "../Redux/Slices/alertSlice";
+import { REACT_APP_URL_KEY } from "../Utils/KeyUrl";
 
-const baseUrl = "http://52.221.201.188:3001/list";
+const baseUrl = `${REACT_APP_URL_KEY}:3001/list`;
 
 //  Create promise to queue requests
 let submitCall = Promise.resolve();

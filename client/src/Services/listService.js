@@ -5,8 +5,9 @@ import {
   successCreatingCard,
   deleteCard,
 } from "../Redux/Slices/listSlice";
+import { REACT_APP_URL_KEY } from "../Utils/KeyUrl";
 
-const baseUrl = "http://52.221.201.188:3001/card";
+const baseUrl = `${REACT_APP_URL_KEY}:3001/card`;
 
 export const createCard = async (title, listId, boardId, dispatch) => {
   dispatch(setLoading(true));

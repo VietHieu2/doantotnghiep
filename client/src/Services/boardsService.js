@@ -14,7 +14,8 @@ import {
   successFetchingBoard,
   updateTitle,
 } from "../Redux/Slices/boardSlice";
-const baseUrl = "http://52.221.201.188:3001/board";
+import { REACT_APP_URL_KEY } from "../Utils/KeyUrl";
+const baseUrl = `${REACT_APP_URL_KEY}:3001/board`;
 
 export const getBoards = async (fromDropDown, dispatch) => {
   if (!fromDropDown) dispatch(startFetchingBoards());

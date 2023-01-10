@@ -15,10 +15,11 @@ import {
   updateBackground,
   updateDescription,
 } from "../Redux/Slices/boardSlice";
+import { REACT_APP_URL_KEY } from "../Utils/KeyUrl";
 
-const listRoute = "http://52.221.201.188:3001/list";
-const boardRoute = "http://52.221.201.188:3001/board";
-
+const listRoute = `${REACT_APP_URL_KEY}:3001/list`;
+const boardRoute = `${REACT_APP_URL_KEY}:3001/board`;
+console.log(listRoute);
 export const getLists = async (boardId, dispatch) => {
   dispatch(setLoading(true));
   try {

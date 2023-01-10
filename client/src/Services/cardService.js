@@ -52,8 +52,9 @@ import {
   updateMemberOfCard,
   updateStartDueDatesOfCard,
 } from "../Redux/Slices/listSlice";
+import { REACT_APP_URL_KEY } from "../Utils/KeyUrl";
 
-const baseUrl = "http://52.221.201.188:3001/card";
+const baseUrl = `${REACT_APP_URL_KEY}:3001/card`;
 let submitCall = Promise.resolve();
 
 export const getCard = async (cardId, listId, boardId, dispatch) => {
