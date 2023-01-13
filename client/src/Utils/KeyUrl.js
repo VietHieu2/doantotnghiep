@@ -1,1 +1,1 @@
-export const REACT_APP_URL_KEY = 'http://18.143.201.125:32221/'
+export const REACT_APP_URL_KEY = 'http://18.143.201.125:32221'
