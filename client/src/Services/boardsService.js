@@ -15,7 +15,7 @@ import {
   updateTitle,
 } from "../Redux/Slices/boardSlice";
 import { REACT_APP_URL_KEY } from "../Utils/KeyUrl";
-const baseUrl = `${REACT_APP_URL_KEY}:3001/board`;
+const baseUrl = `${REACT_APP_URL_KEY}/board`;
 
 export const getBoards = async (fromDropDown, dispatch) => {
   if (!fromDropDown) dispatch(startFetchingBoards());
@@ -24,7 +24,7 @@ export const getBoards = async (fromDropDown, dispatch) => {
     setTimeout(() => {
       dispatch(successFetchingBoards({ boards: res.data }));
     }, 1000);
-  } catch (error) {
+  } catch (error) { 
     dispatch(failFetchingBoards());
     dispatch(
       openAlert({

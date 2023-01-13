@@ -17,8 +17,8 @@ import {
 } from "../Redux/Slices/boardSlice";
 import { REACT_APP_URL_KEY } from "../Utils/KeyUrl";
 
-const listRoute = `${REACT_APP_URL_KEY}:3001/list`;
-const boardRoute = `${REACT_APP_URL_KEY}:3001/board`;
+const listRoute = `${REACT_APP_URL_KEY}/list`;
+const boardRoute = `${REACT_APP_URL_KEY}/board`;
 console.log(listRoute);
 export const getLists = async (boardId, dispatch) => {
   dispatch(setLoading(true));

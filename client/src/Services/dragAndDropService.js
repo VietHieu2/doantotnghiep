@@ -6,7 +6,7 @@ import {
 import { openAlert } from "../Redux/Slices/alertSlice";
 import { REACT_APP_URL_KEY } from "../Utils/KeyUrl";
 
-const baseUrl = `${REACT_APP_URL_KEY}:3001/list`;
+const baseUrl = `${REACT_APP_URL_KEY}/list`;
 
 //  Create promise to queue requests
 let submitCall = Promise.resolve();

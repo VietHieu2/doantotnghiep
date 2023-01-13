@@ -54,7 +54,7 @@ import {
 } from "../Redux/Slices/listSlice";
 import { REACT_APP_URL_KEY } from "../Utils/KeyUrl";
 
-const baseUrl = `${REACT_APP_URL_KEY}:3001/card`;
+const baseUrl = `${REACT_APP_URL_KEY}/card`;
 let submitCall = Promise.resolve();
 
 export const getCard = async (cardId, listId, boardId, dispatch) => {

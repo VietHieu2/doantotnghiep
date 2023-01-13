@@ -14,7 +14,7 @@ import {
 import { openAlert } from "../Redux/Slices/alertSlice";
 import setBearer from "../Utils/setBearer";
 import { REACT_APP_URL_KEY } from "../Utils/KeyUrl";
-const baseUrl = `${REACT_APP_URL_KEY}:3001/user/`;
+const baseUrl = `${REACT_APP_URL_KEY}/user/`;
 
 export const register = async (
   { name, surname, email, password, repassword },
